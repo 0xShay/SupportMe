@@ -1,7 +1,7 @@
 # SupportMe
 ## A Flask-based support ticket system powered by SQLite
 
-This project was my NEA submission for the AQA exam board, gaining 51 of the available 75 marks.
+This project was my NEA submission for the AQA CS (7517) NEA exam, gaining 51 of the available 75 marks.
 
 ## Brief
 My sister works at a dance studio and often has to deal with many enquiries and issues. Usually, people raise their issues via a telephone call or by email.
