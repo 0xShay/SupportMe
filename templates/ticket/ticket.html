@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2 id="ticket_title">...</h2>
+    <p id="ticket_id">Ticket #{{ ticket_id }}</p>
+
+    <p>
+        <span id="opened_at"></span><br>
+        <span id="closed_at"></span>
+    </p>
+    <p>
+        <span id="opened_by">...</span><br>
+        <span id="claimed_by">This ticket has not been claimed</span>
+    </p>
+
+    <br>
+
+    <label for="message">Send a message:</label><br>
+    <textarea type="text" id="message_input" name="message" rows="10"></textarea>
+
+    <br><br>
+
+    <button id="close_ticket_btn" type="submit" onclick="sendMessage('!close')">Close ticket</button>
+    <button id="open_ticket_btn" type="submit" onclick="sendMessage('!open')">Reopen ticket</button>
+    <button id="send_message_btn" type="submit" onclick="sendMessage()">Send</button>
+    <button id="claim_ticket_btn" type="submit" onclick="sendMessage('!claim')">Claim ticket</button>
+
+    <br><br>
+
+    <table id="ticket_messages"></table>
+
+    <script>
+        if (currentUser == null) window.location.href = "/login";
+
+        const profiles = {};
+
+        const ticketID = parseInt("{{ ticket_id }}");
+
+        getTicket(ticketID).then(ticket => {
+            if (ticket != false) {
+                ticket = ticket["ticket_data"];
+                document.getElementById("ticket_title").innerText = "[" + (ticket["closed_at"] == -1 ? "OPEN" : "CLOSED") + "] " + ticket["title"];
+                document.getElementById("opened_at").innerText = "Opened: " + new Date(ticket["opened_at"] * 1000).toLocaleString();
+                if (ticket["closed_at"] != -1) {
+                    document.getElementById("closed_at").innerText = "Closed: " + new Date(ticket["closed_at"] * 1000).toLocaleString();
+                    document.getElementById("open_ticket_btn").style.display = "inline";
+                } else {
+                    document.getElementById("close_ticket_btn").style.display = "inline";
+                };
+                getProfile(ticket["customer_id"]).then(customer => {
+                    document.getElementById("opened_by").innerHTML = "Opened by <b>" + customer["username"] + "</b> (ID: " + ticket["customer_id"] + ")";
+                });
+                if (currentUser["account_type"] == ACCOUNT_TYPE_ASSISTANT && ticket["assistant_id"] != currentUser["user_id"]) {
+                    document.getElementById("claim_ticket_btn").style.display = "inline";
+                };
+                if (ticket["assistant_id"] != -1) {
+                    getProfile(ticket["assistant_id"]).then(assistant => {
+                        document.getElementById("claimed_by").innerHTML = "Claimed by <b>" + assistant["username"] + "</b> (ID: " + ticket["assistant_id"] + ")";
+                    });
+                };
+            };
+        });
+
+        const ticketMessagesTable = document.getElementById("ticket_messages");        
+
+        getMessages(ticketID).then(async messages => {
+            for (a_id of messages.map(m => m["author_id"])) { profiles[a_id] = await getProfile(a_id); }
+
+            for (msg of messages) {
+
+                let _tr = document.createElement("tr");
+                let _td1 = document.createElement("td");
+                let _img = document.createElement("img");
+                _img.src = profiles[msg["author_id"]]["profile_icon"];
+                _img.width = 150;
+                let _td2 = document.createElement("td");
+                let _h3_sender = document.createElement("h3");
+                _h3_sender.classList.add("message_sender");
+                _h3_sender.innerText = profiles[msg["author_id"]]["username"];
+                let _p_body = document.createElement("p");
+                _p_body.classList.add("message_body");
+                _p_body.innerText = msg["body"];
+                let _br1 = document.createElement("br");
+                let _p_sent_at = document.createElement("p");
+                _p_sent_at.classList.add("message_sent_at");
+                _p_sent_at.innerText = new Date(msg["sent_at"] * 1000).toLocaleString();
+                let _br2 = document.createElement("br");
+                _td1.appendChild(_img);
+                _td2.appendChild(_h3_sender);
+                _td2.appendChild(_p_body);
+                _td2.appendChild(_br1);
+                _td2.appendChild(_p_sent_at);
+                _td2.appendChild(_br2);
+                _tr.appendChild(_td1);
+                _tr.appendChild(_td2);
+                ticketMessagesTable.appendChild(_tr);
+
+            };
+        });
+
+    </script>
+{% endblock %}

@@ -1,0 +1,89 @@
+body {
+    background-color: rgb(203, 255, 238);
+    font-family: 'Barlow', 'Gill Sans Nova', 'Calibri';
+    padding: 20px;
+    text-align: center;
+}
+
+p {
+    margin: 20px 0 0 0;
+}
+
+h1 {
+    text-align: center;
+    font-size: min(8vw, 45px);
+    margin: 20px 0 0 0;
+}
+
+h2 {
+    font-size: 30px;
+    margin: 20px 0 0 0;
+}
+
+h3 {
+    font-size: 25px;
+    margin: 20px 0 0 0;
+}
+
+p, label, input, button, a, li {
+    font-size: 20px;
+}
+
+p#loggedInMessage {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+}
+
+p#ticket_id {
+    margin: 0 0 0 0;
+}
+
+ul {
+    text-align: left;
+}
+
+input {
+    width: min(225px, 80%);
+}
+
+textarea {
+    width: min(225px, 80%);
+}
+
+button {
+    padding: 10px 30px;
+    margin: 5px 0 0 0;
+}
+
+button#close_ticket_btn, button#open_ticket_btn, button#claim_ticket_btn {
+    display: none;
+}
+
+section#claimable_tickets {
+    display: none;
+}
+
+table#ticket_messages tr img {
+    padding-bottom: 20px;
+}
+
+table#ticket_messages tr td {
+    text-align: left;
+    padding: 0 0 0 20px;
+    vertical-align: top;
+}
+
+table#ticket_messages tr td * {
+    margin: 0;
+}
+
+table#ticket_messages p.message_sent_at {
+    font-size: 15px
+}
+
+@media only screen and (max-width: 600px) {
+    input {
+        width: min(200px, 80%);
+    }
+}

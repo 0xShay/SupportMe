@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>SupportMe</title>
+    
+        <link rel="stylesheet" href="/style.css">
+        <link rel="icon" href="/icon.png">
+        
+    </head>
+    
+    <body>
+        
+        <p id="loggedInMessage">...</p>
+        
+        <br>
+
+        <a href="/home" style="text-decoration: none; color: black;">
+            <h1>💬 SupportMe 💁</h1>
+        </a>
+
+        <script src="/src/constants.js"></script>
+        <script src="/src/jwt-decode.js"></script>
+        <script src="/src/userTools.js"></script>
+        <script src="/src/ticketTools.js"></script>
+
+        <script>
+            const currentUser = getLoggedInUser();
+            if (currentUser != null) {
+                getProfile(currentUser["user_id"]).then(profile => {
+                    document.getElementById("loggedInMessage").innerText = "Logged in: " + profile["username"];
+                });
+            } else {
+                document.getElementById("loggedInMessage").innerText = "You are not logged in.";
+            };
+        </script>
+
+        {% block content %} {% endblock %}
+
+    </body>
+
+</html>

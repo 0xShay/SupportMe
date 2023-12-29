@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Register</h2>
+
+    <br>
+
+    <label for="username">Username</label><br>
+    <input type="text" id="username_input" name="username" />
+
+    <br><br>
+
+    <label for="email">Email</label><br>
+    <input type="email" id="email_input" name="email" />
+
+    <br><br>
+
+    <label for="password">Password</label><br>
+    <input type="password" id="password_input" name="password" />
+
+    <br><br>
+
+    <label for="passwordc">Confirm Password</label><br>
+    <input type="password" id="passwordc_input" name="passwordc" />
+
+    <br><br>
+
+    <button type="submit" onclick="register()">Register</button>
+
+    <br><br>
+
+    <a href="login">Already have an account? Click here to log in!</a>
+
+    <script>
+        if (currentUser != null) window.location.href = "/home";
+    </script>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Profile</h2>
+
+    <br>
+
+    <img id="profile_icon">
+
+    <br><br>
+    
+    <label for="user_id">Your user ID</label><br>
+    <input type="text" id="user_id_input" name="user_id" disabled />
+
+    <br><br>
+
+    <label for="username">Your username (cannot be changed)</label><br>
+    <input type="text" id="username_input" name="username" disabled />
+
+    <br><br>
+
+    <label for="new_password">New password</label><br>
+    <input type="password" id="new_password_input" name="new_password" />
+
+    <br><br>
+
+    <label for="new_passwordc">Confirm new password</label><br>
+    <input type="password" id="new_passwordc_input" name="new_passwordc" />
+
+    <br><br>
+
+    <label for="old_password">Old password</label><br>
+    <input type="password" id="old_password_input" name="old_password" />
+
+    <br><br>
+
+    <label for="profile_icon">Profile picture</label><br>
+    <select name="profile_icon" id="profile_icon_select" oninput="updateProfileIconPreview()">
+        <option value="/profile-icons/blue.png">Blue</option>
+        <option value="/profile-icons/green.png">Green</option>
+        <option value="/profile-icons/purple.png">Purple</option>
+        <option value="/profile-icons/red.png">Red</option>
+    </select>
+
+    <br><br>
+
+    <button type="submit" onclick="updateProfile()">Save changes</button>
+
+    <br><br>
+
+    <a href="register">Don't have an account? Click here to sign up!</a>
+
+    <script>
+        if (currentUser == null) window.location.href = "/login";
+
+        getProfile(currentUser["user_id"]).then(profile => {
+            document.getElementById("profile_icon").src = profile["profile_icon"];
+            document.getElementById("profile_icon").width = 150;
+            document.getElementById("user_id_input").value = profile["user_id"];
+            document.getElementById("username_input").value = profile["username"];
+            document.getElementById("profile_icon_select").value = profile["profile_icon"];
+        });
+
+        function updateProfileIconPreview() {
+            document.getElementById("profile_icon").src = document.getElementById("profile_icon_select").value;
+        };
+    </script>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Open a new support ticket</h2>
+
+    <br>
+
+    <label for="ticket_title">Ticket Title</label><br>
+    <input type="text" id="ticket_title_input" name="ticket_title" />
+
+    <br><br>
+
+    <label for="message">Ticket Description</label><br>
+    <textarea type="text" id="message_input" name="message" rows="10"></textarea>
+
+    <br><br>
+
+    <button type="submit" onclick="openTicket()">Open ticket</button>
+
+    <br><br>
+
+    <script>
+        if (currentUser == null) window.location.href = "/login";
+    </script>
+{% endblock %}

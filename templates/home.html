@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Home</h2>
+
+    <br>
+
+    <a href="/ticket/new"><button id="open_ticket_button">Open a support ticket</button></a>
+    <br>
+    <a href="/profile"><button>Edit profile</button></a>
+    <button onclick=logout()>Log out</button>
+
+    <section>
+
+        <h3>Open tickets</h3>
+
+        <ul id="open_tickets_list"></ul>
+
+    </section>
+
+    <section id="claimable_tickets">
+
+        <h3>Claimable tickets</h3>
+
+        <ul id="unclaimed_tickets_list"></ul>
+
+    </section>
+
+    <section>
+
+        <h3>Closed tickets</h3>
+
+        <ul id="closed_tickets_list"></ul>
+
+    </section>
+
+    <script>
+        if (currentUser == null) window.location.href = "/login";
+
+        const openTicketsList = document.getElementById("open_tickets_list")
+        const closedTicketsList = document.getElementById("closed_tickets_list")
+        const unclaimedTicketsList = document.getElementById("unclaimed_tickets_list")
+
+        getOpenTicketsByUserID(currentUser["user_id"]).then(openTickets => {
+            if (openTickets.length == 0) openTicketsList.innerHTML = "<i>No tickets to show.</i>"
+            for (t of openTickets) {
+                let _a = document.createElement("a");
+                _a.innerText = "#" + t["ticket_id"] + " - " + t["title"];
+                _a.href = "/ticket/" + t["ticket_id"];
+                let _li = document.createElement("li");
+                _li.appendChild(_a);
+                openTicketsList.appendChild(_li);
+            };
+        });
+
+        getClosedTicketsByUserID(currentUser["user_id"]).then(closedTickets => {
+            if (closedTickets.length == 0) closedTicketsList.innerHTML = "<i>No tickets to show.</i>"
+            for (t of closedTickets) {
+                let _a = document.createElement("a");
+                _a.innerText = "#" + t["ticket_id"] + " - " + t["title"];
+                _a.href = "/ticket/" + t["ticket_id"];
+                let _li = document.createElement("li");
+                _li.appendChild(_a);
+                closedTicketsList.appendChild(_li);
+            };
+        });
+
+        if (currentUser["account_type"] == ACCOUNT_TYPE_CUSTOMER) {
+            
+            document.getElementById("claimable_tickets").style.display = "none";
+        
+        } else if (currentUser["account_type"] == ACCOUNT_TYPE_ASSISTANT) {
+        
+            document.getElementById("claimable_tickets").style.display = "block";
+            document.getElementById("open_ticket_button").style.display = "none";
+        
+            getUnclaimedTickets().then(unclaimedTickets => {
+                if (unclaimedTickets.length == 0) unclaimedTicketsList.innerHTML = "<i>No tickets to show.</i>"
+                for (t of unclaimedTickets) {
+                    _a = document.createElement("a");
+                    _a.innerText = "#" + t["ticket_id"] + " - " + t["title"];
+                    _a.href = "/ticket/" + t["ticket_id"];
+                    _li = document.createElement("li");
+                    _li.appendChild(_a);
+                    unclaimedTicketsList.appendChild(_li);
+                };
+            });
+
+        }
+    </script>
+{% endblock %}

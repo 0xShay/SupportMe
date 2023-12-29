@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Login</h2>
+
+    <br>
+
+    <label for="username">Username</label><br>
+    <input type="text" id="username_input" name="username" />
+
+    <br><br>
+
+    <label for="password">Password</label><br>
+    <input type="password" id="password_input" name="password" />
+
+    <br><br>
+
+    <button type="submit" onclick="login()">Login</button>
+
+    <br><br>
+
+    <a href="register">Don't have an account? Click here to sign up!</a>
+
+    <script>
+        if (currentUser != null) window.location.href = "/home";
+    </script>
+{% endblock %}
